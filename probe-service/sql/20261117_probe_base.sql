@@ -1,0 +1,1 @@
+-- Initial schema is identical to postgre.sql for the first deployment.

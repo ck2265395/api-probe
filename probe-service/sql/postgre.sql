@@ -33,3 +33,19 @@ CREATE TABLE probe_webhook_channel (
   enabled boolean NOT NULL DEFAULT true
 );
 
+CREATE TABLE probe_scenario (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  platform_id uuid NOT NULL REFERENCES probe_platform(id) ON DELETE CASCADE,
+  name varchar(150) NOT NULL,
+  enabled boolean NOT NULL DEFAULT true,
+  current_version integer NOT NULL DEFAULT 1
+);
+
+CREATE TABLE probe_scenario_version (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  scenario_id uuid NOT NULL REFERENCES probe_scenario(id) ON DELETE CASCADE,
+  version integer NOT NULL,
+  definition jsonb NOT NULL,
+  created_at timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  UNIQUE (scenario_id, version)
+);

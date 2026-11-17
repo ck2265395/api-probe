@@ -1,0 +1,12 @@
+{
+  "name": "api-probe",
+  "private": true,
+  "workspaces": ["probe-service", "probe-admin"],
+  "scripts": {
+    "test": "npm test --workspaces --if-present",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "build": "npm run build --workspaces --if-present"
+  },
+  "engines": { "node": ">=22" }
+}
+

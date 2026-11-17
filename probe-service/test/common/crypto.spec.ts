@@ -15,9 +15,10 @@ describe('CryptoService', () => {
 
   it('rejects ciphertext modified after encryption', () => {
     const encrypted = crypto.encrypt('probe-password');
-    const tampered = `${encrypted.slice(0, -1)}${encrypted.endsWith('A') ? 'B' : 'A'}`;
+    const parts = encrypted.split('.');
+    parts[3] = `${parts[3][0] === 'A' ? 'B' : 'A'}${parts[3].slice(1)}`;
+    const tampered = parts.join('.');
 
     expect(() => crypto.decrypt(tampered)).toThrow();
   });
 });
-

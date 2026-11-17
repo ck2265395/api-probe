@@ -49,3 +49,28 @@ CREATE TABLE probe_scenario_version (
   created_at timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP,
   UNIQUE (scenario_id, version)
 );
+
+CREATE TABLE probe_run (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  schedule_id uuid,
+  scenario_version_id uuid NOT NULL REFERENCES probe_scenario_version(id),
+  status varchar(30) NOT NULL DEFAULT 'PENDING',
+  trigger_type varchar(20) NOT NULL,
+  started_at timestamptz,
+  finished_at timestamptz
+);
+
+CREATE TABLE probe_step_run (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  run_id uuid NOT NULL REFERENCES probe_run(id) ON DELETE CASCADE,
+  step_id varchar(100) NOT NULL,
+  status varchar(30) NOT NULL,
+  result jsonb NOT NULL,
+  created_at timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE probe_run_context (
+  run_id uuid PRIMARY KEY REFERENCES probe_run(id) ON DELETE CASCADE,
+  encrypted_context text NOT NULL,
+  updated_at timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
